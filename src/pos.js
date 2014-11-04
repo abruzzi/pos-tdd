@@ -1,25 +1,3 @@
-function Item(name, count, unit, price, barcode) {
-	this.name = name;
-	this.count = count;
-	this.unit = unit;
-	this.price = price;
-	this.barcode = barcode;
-}
-
-Item.prototype.format = function() {
-	return "名称："+this.name+"，数量："+this.count+this.unit+"，单价："+this.price.toFixed(2)+"(元)，小计："+(this.calcItemPrice()).toFixed(2)+"(元)\n";
-}
-
-Item.prototype.calcItemPrice = function() {
-	return this.count * this.price;
-}
-
-function Barcode(code) {
-	var pair = code.split('-');
-	this.barcode = pair[0];
-	this.count = pair[1] ? pair[1] : 1;
-}
-
 function POS(items) {
 	this.items = items;
 	this.result = "";
@@ -93,45 +71,6 @@ POS.prototype.print = function() {
 
 	return this.result;
 }
-
-var items = [
-        {
-            barcode: "ITEM000000",
-            name: "可口可乐",
-            unit: "瓶",
-            price: 3.00
-        },
-        {
-            barcode: "ITEM000001",
-            name: "雪碧",
-            unit: "瓶",
-            price: 3.00
-        },
-        {
-            barcode: "ITEM000002",
-            name: "苹果",
-            unit: "斤",
-            price: 5.50
-        },
-        {
-            barcode: "ITEM000003",
-            name: "荔枝",
-            unit: "斤",
-            price: 15.00
-        },
-        {
-            barcode: "ITEM000004",
-            name: "电池",
-            unit: "个",
-            price: 2.00
-        },
-        {
-            barcode: "ITEM000005",
-            name: "方便面",
-            unit: "袋",
-            price: 4.50
-        }
-    ];
 
 function format(barcodes) {
 	var pos = new POS(items);
