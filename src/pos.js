@@ -48,19 +48,42 @@ function findByBarcode(barcode) {
 	return item;
 }
 
-function format(barcodes) {
-	var barcode = barcodes[0];
-	var item = findByBarcode(barcode);
+function formatAnItem(item) {
+	return "名称："+item.name+"，数量："+item.count+item.unit+"，单价："+item.price.toFixed(2)+"(元)，小计："+(item.count*item.price).toFixed(2)+"(元)\n";
+}
 
+function indexOf(items, barcode) {
+	for(var i = 0; i < items.length; i++) {
+		if(items[i].barcode == barcode) {
+			return i;
+		}
+	}
+
+	return -1;
+}
+
+function format(barcodes) {
 	var result = "";
 	result += "***<没钱赚商店>购物清单***\n";
 
 	var sum = 0;
+	var temp = [];
+
 	barcodes.forEach(function(barcode) {
 		var item = findByBarcode(barcode);
-		result += "名称："+item.name+"，数量：1"+item.unit+"，单价："+item.price.toFixed(2)+"(元)，小计："+item.price.toFixed(2)+"(元)\n";
-		sum += item.price;		
+		item.count = 1;
+		var index = indexOf(temp, barcode);
+		if(index >= 0) {
+			temp[index].count += 1;
+		} else {
+			temp.push(item);	
+		}
 	});
+
+	temp.forEach(function(item) {
+		result += formatAnItem(item);
+		sum += item.price * item.count;
+	})
     
     result += "----------------------\n";
     result += "总计："+sum.toFixed(2)+"(元)\n" +
