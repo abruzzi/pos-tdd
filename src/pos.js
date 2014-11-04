@@ -71,7 +71,6 @@ POS.prototype.normalize = function() {
 
 POS.prototype.scan = function(barcodes) {
 	this.barcodes = barcodes;
-	this.result += "***<没钱赚商店>购物清单***\n";
 
 	var sum = 0;
 	var items = this.normalize();
@@ -83,11 +82,15 @@ POS.prototype.scan = function(barcodes) {
 	});
     
     this.result += "----------------------\n";
-    this.result += "总计："+sum.toFixed(2)+"(元)\n" +
-			"**********************";
+    this.result += "总计："+sum.toFixed(2)+"(元)\n";
 }
 
 POS.prototype.print = function() {
+	this.result = 
+		"***<没钱赚商店>购物清单***\n" + 
+		this.result + 
+		"**********************";
+
 	return this.result;
 }
 
