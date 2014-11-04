@@ -77,4 +77,17 @@ describe("POS", function() {
 
 		expect(result).toBe(expected);            
 	});
+
+	it("should scan items by units", function() {
+		var expected = 
+			"***<没钱赚商店>购物清单***\n" +
+            "名称：苹果，数量：3斤，单价：5.50(元)，小计：16.50(元)\n" +
+    		"----------------------\n" +
+            "总计：16.50(元)\n" +
+            "**********************";
+
+		var result = format(["ITEM000002-3"]);
+
+		expect(result).toBe(expected);            
+	})
 })

@@ -71,8 +71,15 @@ function normalize(barcodes) {
 	var items = [];
 
 	barcodes.forEach(function(barcode) {
-		var item = findByBarcode(barcode);
-		var index = indexOf(items, barcode);
+		var pair = barcode.split('-');
+		var item = findByBarcode(pair[0]);
+
+		if(pair[1]) {
+			item.count = pair[1];
+		}
+		
+		var index = indexOf(items, pair[0]);
+
 		if(index >= 0) {
 			items[index].count += 1;
 		} else {
