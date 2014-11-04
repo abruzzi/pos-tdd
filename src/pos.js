@@ -37,8 +37,7 @@ var items = [
         }
     ];
 
-function format(list) {
-	var barcode = list[0];
+function findByBarcode(barcode) {
 	var item = {};
 	for(var i = 0; i < items.length; i++) {
 		if(barcode == items[i].barcode) {
@@ -46,6 +45,12 @@ function format(list) {
 			break;
 		}
 	}
+	return item;
+}
+
+function format(barcodes) {
+	var barcode = barcodes[0];
+	var item = findByBarcode(barcode);
 
 	return "***<没钱赚商店>购物清单***\n" +
             "名称："+item.name+"，数量：1"+item.unit+"，单价："+item.price.toFixed(2)+"(元)，小计："+item.price.toFixed(2)+"(元)\n" +
