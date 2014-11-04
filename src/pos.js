@@ -52,9 +52,19 @@ function format(barcodes) {
 	var barcode = barcodes[0];
 	var item = findByBarcode(barcode);
 
-	return "***<没钱赚商店>购物清单***\n" +
-            "名称："+item.name+"，数量：1"+item.unit+"，单价："+item.price.toFixed(2)+"(元)，小计："+item.price.toFixed(2)+"(元)\n" +
-            "----------------------\n" +
-            "总计："+item.price.toFixed(2)+"(元)\n" +
-            "**********************";
+	var result = "";
+	result += "***<没钱赚商店>购物清单***\n";
+
+	var sum = 0;
+	barcodes.forEach(function(barcode) {
+		var item = findByBarcode(barcode);
+		result += "名称："+item.name+"，数量：1"+item.unit+"，单价："+item.price.toFixed(2)+"(元)，小计："+item.price.toFixed(2)+"(元)\n";
+		sum += item.price;		
+	});
+    
+    result += "----------------------\n";
+    result += "总计："+sum.toFixed(2)+"(元)\n" +
+			"**********************";
+
+	return result;
 }

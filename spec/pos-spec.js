@@ -51,16 +51,18 @@ describe("POS", function() {
 		expect(result).toBe(expected);
 	});
 
-	it("should scan another item", function() {
+	it("should scan multiple items at one time", function() {
 		var expected = 
 			"***<没钱赚商店>购物清单***\n" +
+            "名称：可口可乐，数量：1瓶，单价：3.00(元)，小计：3.00(元)\n" +
             "名称：雪碧，数量：1瓶，单价：3.00(元)，小计：3.00(元)\n" +
             "----------------------\n" +
-            "总计：3.00(元)\n" +
+            "总计：6.00(元)\n" +
             "**********************";
-
-		var result = format(["ITEM000001"]);
+            
+        var result = format(["ITEM000000", "ITEM000001"]);
 
 		expect(result).toBe(expected);
 	});
+
 })
