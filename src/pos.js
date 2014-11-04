@@ -67,23 +67,28 @@ function calcItemPrice(item) {
 	return item.count * item.price;
 }
 
+function Barcode(code) {
+	var pair = code.split('-');
+	this.barcode = pair[0];
+	this.count = pair[1] ? pair[1] : 1;
+}
+
 function normalize(barcodes) {
 	var items = [];
 
 	barcodes.forEach(function(barcode) {
-		var pair = barcode.split('-');
-		var item = findByBarcode(pair[0]);
+		var code = new Barcode(barcode);
+		var item = findByBarcode(code.barcode);
 
-		if(pair[1]) {
-			item.count = pair[1];
+		if(code.count) {
+			item.count = code.count;
 		}
-		
-		var index = indexOf(items, pair[0]);
 
+		var index = indexOf(items, code.barcode);
 		if(index >= 0) {
 			items[index].count += 1;
 		} else {
-			items.push(item);	
+			items.push(item);
 		}
 	});
 
