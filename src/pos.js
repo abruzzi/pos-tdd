@@ -42,6 +42,7 @@ function findByBarcode(barcode) {
 	for(var i = 0; i < items.length; i++) {
 		if(barcode == items[i].barcode) {
 			item = items[i];
+			item.count = 1;
 			break;
 		}
 	}
@@ -49,7 +50,7 @@ function findByBarcode(barcode) {
 }
 
 function formatAnItem(item) {
-	return "名称："+item.name+"，数量："+item.count+item.unit+"，单价："+item.price.toFixed(2)+"(元)，小计："+(item.count*item.price).toFixed(2)+"(元)\n";
+	return "名称："+item.name+"，数量："+item.count+item.unit+"，单价："+item.price.toFixed(2)+"(元)，小计："+(calcItemPrice(item)).toFixed(2)+"(元)\n";
 }
 
 function indexOf(items, barcode) {
@@ -62,27 +63,36 @@ function indexOf(items, barcode) {
 	return -1;
 }
 
+function calcItemPrice(item) {
+	return item.count * item.price;
+}
+
+function normalize(barcodes) {
+	var items = [];
+
+	barcodes.forEach(function(barcode) {
+		var item = findByBarcode(barcode);
+		var index = indexOf(items, barcode);
+		if(index >= 0) {
+			items[index].count += 1;
+		} else {
+			items.push(item);	
+		}
+	});
+
+	return items;
+}
+
 function format(barcodes) {
 	var result = "";
 	result += "***<没钱赚商店>购物清单***\n";
 
 	var sum = 0;
-	var temp = [];
+	var items = normalize(barcodes);
 
-	barcodes.forEach(function(barcode) {
-		var item = findByBarcode(barcode);
-		item.count = 1;
-		var index = indexOf(temp, barcode);
-		if(index >= 0) {
-			temp[index].count += 1;
-		} else {
-			temp.push(item);	
-		}
-	});
-
-	temp.forEach(function(item) {
+	items.forEach(function(item) {
 		result += formatAnItem(item);
-		sum += item.price * item.count;
+		sum += calcItemPrice(item);
 	})
     
     result += "----------------------\n";
