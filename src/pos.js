@@ -37,20 +37,31 @@ var items = [
         }
     ];
 
-function findByBarcode(barcode) {
-	var item = {};
-	for(var i = 0; i < items.length; i++) {
-		if(barcode == items[i].barcode) {
-			item = items[i];
-			item.count = 1;
-			break;
-		}
-	}
-	return item;
+function Item(name, count, unit, price, barcode) {
+	this.name = name;
+	this.count = count;
+	this.unit = unit;
+	this.price = price;
+	this.barcode = barcode;
 }
 
-function formatAnItem(item) {
-	return "名称："+item.name+"，数量："+item.count+item.unit+"，单价："+item.price.toFixed(2)+"(元)，小计："+(calcItemPrice(item)).toFixed(2)+"(元)\n";
+Item.prototype.format = function() {
+	return "名称："+this.name+"，数量："+this.count+this.unit+"，单价："+this.price.toFixed(2)+"(元)，小计："+(this.calcItemPrice()).toFixed(2)+"(元)\n";
+}
+
+Item.prototype.calcItemPrice = function() {
+	return this.count * this.price;
+}
+
+function findByBarcode(barcode) {
+	for(var i = 0; i < items.length; i++) {
+		var current = items[i];
+		if(barcode == current.barcode) {
+			return new Item(current.name, 1, current.unit, current.price, current.barcode);
+		}
+	}
+
+	return null;
 }
 
 function indexOf(items, barcode) {
@@ -61,10 +72,6 @@ function indexOf(items, barcode) {
 	}
 
 	return -1;
-}
-
-function calcItemPrice(item) {
-	return item.count * item.price;
 }
 
 function Barcode(code) {
@@ -103,9 +110,9 @@ function format(barcodes) {
 	var items = normalize(barcodes);
 
 	items.forEach(function(item) {
-		result += formatAnItem(item);
-		sum += calcItemPrice(item);
-	})
+		result += item.format();
+		sum += item.calcItemPrice();
+	});
     
     result += "----------------------\n";
     result += "总计："+sum.toFixed(2)+"(元)\n" +
