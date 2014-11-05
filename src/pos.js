@@ -1,7 +1,5 @@
 function POS(items) {
 	this.items = items;
-	this.result = "";
-	this.messages = [];
 }
 
 POS.prototype.findByBarcode = function(barcode) {
@@ -48,86 +46,14 @@ POS.prototype.normalize = function() {
 	return items;
 }
 
-
-POS.prototype.prepareItems = function() {
-	var that = this;
-	this.items.forEach(function(item) {
-		that.messages.push(item.format());
-	});
-}
-
-POS.prototype.prepareSummary = function() {
-	var sum = 0;
-	
-	this.items.forEach(function(item) {
-		sum += item.calcItemPrice();
-	});
-
-	this.messages.push("----------------------\n");
-	this.messages.push("总计："+sum.toFixed(2)+"(元)\n");
-}
-
-
-POS.prototype.prepareDiscount = function() {
-	if(this.shouldDisplayDiscount()) {
-		this.messages.push("----------------------\n");
-		this.messages.push("挥泪赠送商品：\n");
-		var that = this;
-		this.items.forEach(function(item) {
-			that.messages.push(item.formatDiscount());
-		});
-	}
-}
-
-POS.prototype.prepareDiscountSummary = function() {
-	if(this.shouldDisplayDiscount()) {
-		this.messages.push("节省："+this.discountAll().toFixed(2)+"(元)\n")
-	}
-}
-
-POS.prototype.shouldDisplayDiscount = function() {
-	var discount = false;
-	this.items.forEach(function(item) {
-		if(item.hasDiscount()) {
-    		discount = true;
-    	}
-	});
-
-	return discount;
-}
-
-POS.prototype.discountAll = function() {
-	var discountAll = 0;
-	this.items.forEach(function(item) {
-		if(item.hasDiscount()) {
-    		discountAll += item.getDiscount();
-    	}
-	});
-	return discountAll;
-}
-
 POS.prototype.scan = function(barcodes) {
 	this.barcodes = barcodes;
 	this.items = this.normalize();
 }
 
-POS.prototype.prepareHeader = function() {
-	this.messages.push("***<没钱赚商店>购物清单***\n");
-}
-
-POS.prototype.prepareFooter = function() {
-	this.messages.push("**********************");
-}
-
 POS.prototype.print = function() {
-	this.prepareHeader();
-	this.prepareItems();
-	this.prepareDiscount();
-	this.prepareSummary();
-	this.prepareDiscountSummary();
-	this.prepareFooter();
-	
-	return this.messages.join("");
+	var reportGenerator = new ReportGenerator(this.items);
+	return reportGenerator.generate();
 }
 
 function format(barcodes) {
