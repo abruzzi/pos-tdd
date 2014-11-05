@@ -59,8 +59,29 @@ POS.prototype.scan = function(barcodes) {
 		sum += item.calcItemPrice();
 	});
     
+    var discount = 
+    "----------------------\n" +
+	"挥泪赠送商品：\n";
+
+    var discountAll = 0;
+    var did = false;
+    items.forEach(function(item) {
+    	if(item.hasDiscount()) {
+    		did = true;
+    		discountAll += item.getDiscount();
+    	}
+    	discount += item.formatDiscount();
+    });
+
+    if(did) {
+    	this.result += discount;
+    }
+
     this.result += "----------------------\n";
     this.result += "总计："+sum.toFixed(2)+"(元)\n";
+    if(did) {
+    	this.result += "节省："+discountAll.toFixed(2)+"(元)\n";
+    }
 }
 
 POS.prototype.print = function() {

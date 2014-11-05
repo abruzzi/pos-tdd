@@ -63,6 +63,22 @@ describe("POS", function() {
 
 		var result = format(["ITEM000002-3", "ITEM000000", "ITEM000000"]);
 
-		expect(result).toBe(expected);            
+		expect(result).toBe(expected);
+	});
+
+	it("should discount by promotion", function() {
+		var expected = 
+			"***<没钱赚商店>购物清单***\n" + 
+			"名称：雪碧，数量：3瓶，单价：3.00(元)，小计：6.00(元)\n" +
+			"----------------------\n" +
+			"挥泪赠送商品：\n" +
+			"名称：雪碧，数量：1瓶\n" +
+			"----------------------\n" +
+			"总计：6.00(元)\n" +
+			"节省：3.00(元)\n" +
+			"**********************";
+
+		var result = format(['ITEM000001', 'ITEM000001', 'ITEM000001']);
+		expect(result).toBe(expected);
 	});
 })

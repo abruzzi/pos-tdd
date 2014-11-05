@@ -36,3 +36,7 @@ var items = [
             price: 4.50
         }
     ];
+
+var promotions = [
+    "ITEM000001"
+]
